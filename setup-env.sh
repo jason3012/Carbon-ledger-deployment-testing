@@ -1,4 +1,4 @@
-#!/bin/bash
+f#!/bin/bash
 
 echo "🔧 Setting up your .env file..."
 
