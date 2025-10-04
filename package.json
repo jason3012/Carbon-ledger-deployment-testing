@@ -1,0 +1,28 @@
+{
+  "name": "carbon-ledger",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Carbon Ledger - Reframe bank transactions as carbon spending",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:push": "pnpm --filter @carbon-ledger/api prisma db push",
+    "db:migrate": "pnpm --filter @carbon-ledger/api prisma migrate dev",
+    "db:migrate:deploy": "pnpm --filter @carbon-ledger/api prisma migrate deploy",
+    "db:seed": "pnpm --filter @carbon-ledger/api tsx apps/api/src/prisma/seeds/seed.ts",
+    "db:studio": "pnpm --filter @carbon-ledger/api prisma studio",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "turbo": "^1.12.5",
+    "typescript": "^5.3.3"
+  }
+}
+

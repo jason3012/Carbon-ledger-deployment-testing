@@ -1,0 +1,143 @@
+[
+  {
+    "merchant_id": "shell_001",
+    "purchase_date": "2024-10-01",
+    "amount": 45.32,
+    "description": "Shell Gas Station - 12.5 gal",
+    "mcc": "5541"
+  },
+  {
+    "merchant_id": "starbucks_001",
+    "purchase_date": "2024-10-01",
+    "amount": 6.75,
+    "description": "Starbucks Coffee",
+    "mcc": "5814"
+  },
+  {
+    "merchant_id": "wholefood_001",
+    "purchase_date": "2024-10-02",
+    "amount": 127.45,
+    "description": "Whole Foods Market",
+    "mcc": "5411"
+  },
+  {
+    "merchant_id": "pg&e_001",
+    "purchase_date": "2024-10-03",
+    "amount": 156.89,
+    "description": "PG&E Electric Bill - 450 kWh",
+    "mcc": "4900"
+  },
+  {
+    "merchant_id": "uber_001",
+    "purchase_date": "2024-10-03",
+    "amount": 23.50,
+    "description": "Uber Ride",
+    "mcc": "4121"
+  },
+  {
+    "merchant_id": "amazon_001",
+    "purchase_date": "2024-10-04",
+    "amount": 89.99,
+    "description": "Amazon.com - Electronics",
+    "mcc": "5732"
+  },
+  {
+    "merchant_id": "chipotle_001",
+    "purchase_date": "2024-10-05",
+    "amount": 14.25,
+    "description": "Chipotle Mexican Grill",
+    "mcc": "5812"
+  },
+  {
+    "merchant_id": "delta_001",
+    "purchase_date": "2024-10-06",
+    "amount": 324.00,
+    "description": "Delta Airlines - SFO to LAX",
+    "mcc": "3000"
+  },
+  {
+    "merchant_id": "target_001",
+    "purchase_date": "2024-10-07",
+    "amount": 67.43,
+    "description": "Target Store",
+    "mcc": "5411"
+  },
+  {
+    "merchant_id": "shell_002",
+    "purchase_date": "2024-10-08",
+    "amount": 52.18,
+    "description": "Shell Gas Station - 14.3 gal",
+    "mcc": "5541"
+  },
+  {
+    "merchant_id": "zara_001",
+    "purchase_date": "2024-10-09",
+    "amount": 134.50,
+    "description": "Zara Fashion Store",
+    "mcc": "5651"
+  },
+  {
+    "merchant_id": "cvs_001",
+    "purchase_date": "2024-10-10",
+    "amount": 45.67,
+    "description": "CVS Pharmacy",
+    "mcc": "5912"
+  },
+  {
+    "merchant_id": "netflix_001",
+    "purchase_date": "2024-10-11",
+    "amount": 15.99,
+    "description": "Netflix Subscription",
+    "mcc": "5815"
+  },
+  {
+    "merchant_id": "bart_001",
+    "purchase_date": "2024-10-12",
+    "amount": 8.50,
+    "description": "BART Clipper Card Reload",
+    "mcc": "4111"
+  },
+  {
+    "merchant_id": "bestbuy_001",
+    "purchase_date": "2024-10-13",
+    "amount": 299.99,
+    "description": "Best Buy - Laptop Accessories",
+    "mcc": "5732"
+  },
+  {
+    "merchant_id": "safeway_001",
+    "purchase_date": "2024-10-14",
+    "amount": 98.76,
+    "description": "Safeway Grocery",
+    "mcc": "5411"
+  },
+  {
+    "merchant_id": "pizzahut_001",
+    "purchase_date": "2024-10-15",
+    "amount": 28.45,
+    "description": "Pizza Hut",
+    "mcc": "5812"
+  },
+  {
+    "merchant_id": "homedepot_001",
+    "purchase_date": "2024-10-16",
+    "amount": 187.32,
+    "description": "Home Depot",
+    "mcc": "5211"
+  },
+  {
+    "merchant_id": "att_001",
+    "purchase_date": "2024-10-17",
+    "amount": 85.00,
+    "description": "AT&T Wireless Bill",
+    "mcc": "4814"
+  },
+  {
+    "merchant_id": "shell_003",
+    "purchase_date": "2024-10-18",
+    "amount": 48.90,
+    "description": "Shell Gas Station - 13.1 gal",
+    "mcc": "5541"
+  }
+]
+
