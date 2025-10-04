@@ -9,6 +9,8 @@ Make sure you have:
 - ✅ pnpm 8+ installed (`pnpm --version` or install with `npm i -g pnpm`)
 - ✅ Docker installed and running (`docker --version`)
 
+**Quick Setup**: Run `./setup.sh` for automatic setup with validation!
+
 ## Step 1: Clone and Install (2 minutes)
 
 ```bash
@@ -16,7 +18,10 @@ Make sure you have:
 git clone <your-repo-url>
 cd carbon-ledger
 
-# Install all dependencies
+# Option A: Automatic setup (recommended)
+./setup.sh
+
+# Option B: Manual setup
 pnpm install
 ```
 

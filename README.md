@@ -89,7 +89,17 @@ carbon-ledger/
 - pnpm 8+
 - Docker (for local database)
 
-### Local Development
+### Automatic Setup (Recommended)
+
+```bash
+# macOS/Linux
+./setup.sh
+
+# Windows
+setup.bat
+```
+
+### Manual Setup
 
 ```bash
 # Clone the repository

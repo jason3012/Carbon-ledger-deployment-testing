@@ -4,7 +4,9 @@ echo "🔄 Resetting database with fresh data..."
 echo "========================================"
 echo ""
 
-cd /Users/giovanni/divhacks/apps/api
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/apps/api"
 
 echo "1️⃣ Running database seed..."
 pnpm exec dotenv -e ../../.env -- npx tsx src/prisma/seeds/seed.ts

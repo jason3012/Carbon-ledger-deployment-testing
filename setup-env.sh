@@ -6,7 +6,7 @@ cat > .env << 'EOF'
 NODE_ENV=development
 
 # Database
-DATABASE_URL=postgresql://giovanni@localhost:5432/carbon_ledger?schema=public
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/carbon_ledger?schema=public
 
 # Auth
 JWT_SECRET=dev-secret-change-in-production
