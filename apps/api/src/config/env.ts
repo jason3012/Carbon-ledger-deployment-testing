@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
 
+// Load .env - will search up from current directory
 dotenv.config();
 
 const envSchema = z.object({

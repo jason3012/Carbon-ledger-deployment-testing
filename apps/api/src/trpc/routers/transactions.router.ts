@@ -38,5 +38,24 @@ export const transactionsRouter = router({
     .mutation(async ({ input }) => {
       return transactionsService.syncTransactions(input.accountId, input.useRealNessie);
     }),
+
+  createManual: protectedProcedure
+    .input(
+      z.object({
+        accountId: z.string(),
+        merchantName: z.string(),
+        amount: z.number().positive(),
+        description: z.string(),
+        date: z.string().or(z.date()),
+        mcc: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const date = typeof input.date === 'string' ? new Date(input.date) : input.date;
+      return transactionsService.createManualTransaction({
+        ...input,
+        date,
+      });
+    }),
 });
 

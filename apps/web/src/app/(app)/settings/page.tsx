@@ -15,10 +15,23 @@ export default function SettingsPage() {
   const { data: accounts, refetch: refetchAccounts } = trpc.accounts.list.useQuery();
   const syncAccountsMutation = trpc.accounts.syncFromNessie.useMutation();
   const setBudgetMutation = trpc.budgets.upsert.useMutation();
+  const demoLoginMutation = trpc.auth.demoLogin.useMutation();
 
   const handleSyncAccounts = async () => {
-    await syncAccountsMutation.mutateAsync({ useRealNessie: false });
-    refetchAccounts();
+    try {
+      await syncAccountsMutation.mutateAsync({ useRealNessie: true });
+      await refetchAccounts();
+    } catch (error) {
+      console.error('Sync failed:', error);
+      
+      // If it's a foreign key constraint error, refresh the token
+      if (error.message?.includes('Foreign key constraint violated')) {
+        console.log('🔄 Token mismatch detected, refreshing...');
+        // Clear old token and reload
+        localStorage.clear();
+        window.location.reload();
+      }
+    }
   };
 
   const handleSetBudget = async (e: React.FormEvent) => {
@@ -29,6 +42,17 @@ export default function SettingsPage() {
       month,
       limitKg: parseFloat(budgetLimit),
     });
+  };
+
+  const handleRefreshToken = async () => {
+    try {
+      const result = await demoLoginMutation.mutateAsync();
+      // Update the auth store with the new token
+      localStorage.setItem('token', result.token);
+      window.location.reload();
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+    }
   };
 
   return (
@@ -52,6 +76,19 @@ export default function SettingsPage() {
           <div>
             <label className="text-sm font-medium">Email</label>
             <p className="text-muted-foreground">{user?.email}</p>
+          </div>
+          <div className="pt-4 border-t">
+            <Button 
+              onClick={handleRefreshToken}
+              disabled={demoLoginMutation.isPending}
+              variant="outline"
+              size="sm"
+            >
+              {demoLoginMutation.isPending ? 'Refreshing...' : '🔄 Refresh Token'}
+            </Button>
+            <p className="text-xs text-muted-foreground mt-2">
+              Use this if you get authentication errors after database resets
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -88,15 +125,34 @@ export default function SettingsPage() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No accounts connected</p>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">No accounts connected</p>
+              <div className="rounded-lg bg-muted p-4 text-sm">
+                <p className="font-semibold mb-2">🏦 Sync from Nessie API</p>
+                <p className="text-muted-foreground mb-3">
+                  Click below to fetch your accounts and transactions from Capital One's Nessie API.
+                </p>
+                <Button
+                  onClick={handleSyncAccounts}
+                  disabled={syncAccountsMutation.isPending}
+                  variant="default"
+                  size="sm"
+                >
+                  {syncAccountsMutation.isPending ? 'Syncing from Nessie...' : 'Sync Accounts from Nessie'}
+                </Button>
+                {syncAccountsMutation.isError && (
+                  <p className="text-sm text-red-500 mt-2">
+                    Error: {syncAccountsMutation.error.message}
+                  </p>
+                )}
+                {syncAccountsMutation.isSuccess && (
+                  <p className="text-sm text-green-600 mt-2">
+                    ✅ Successfully synced accounts! Check the Dashboard.
+                  </p>
+                )}
+              </div>
+            </div>
           )}
-          <Button
-            onClick={handleSyncAccounts}
-            disabled={syncAccountsMutation.isPending}
-            variant="outline"
-          >
-            {syncAccountsMutation.isPending ? 'Syncing...' : 'Connect Mock Account'}
-          </Button>
         </CardContent>
       </Card>
 

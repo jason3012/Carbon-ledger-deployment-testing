@@ -48,26 +48,9 @@ async function main() {
 
   logger.info(`Seeded ${localFactors.length} emission factors`);
 
-  // Create demo accounts
-  const account1 = await prisma.account.create({
-    data: {
-      userId: demoUser.id,
-      externalId: 'mock_account_1',
-      bankName: 'Capital One',
-      accountType: 'Credit Card',
-    },
-  });
-
-  const account2 = await prisma.account.create({
-    data: {
-      userId: demoUser.id,
-      externalId: 'mock_account_2',
-      bankName: 'Capital One',
-      accountType: 'Checking',
-    },
-  });
-
-  logger.info('Created demo accounts');
+  // NO MOCK DATA - Will sync from Nessie API
+  logger.info('No mock accounts or transactions seeded.');
+  logger.info('Login and use Settings to sync from Nessie API.');
 
   // Set carbon budget
   const currentMonth = new Date().toISOString().slice(0, 7);

@@ -139,5 +139,45 @@ export class TransactionsService {
       },
     });
   }
+
+  /**
+   * Manually create a transaction (for user input)
+   */
+  async createManualTransaction(data: {
+    accountId: string;
+    merchantName: string;
+    amount: number;
+    description: string;
+    date: Date;
+    mcc?: string;
+  }) {
+    // Classify the transaction
+    const category = classifyTransaction(data.mcc || null, data.description);
+
+    // Get or create merchant
+    const merchant = await this.getOrCreateMerchant(data.merchantName, category);
+
+    // Create transaction
+    const transaction = await prisma.transaction.create({
+      data: {
+        accountId: data.accountId,
+        merchantId: merchant.id,
+        date: data.date,
+        amountUSD: data.amount,
+        currency: 'USD',
+        rawDescription: data.description,
+        mcc: data.mcc,
+        category,
+        metadata: { source: 'manual_input' },
+      },
+      include: {
+        merchant: true,
+      },
+    });
+
+    logger.info(`Manually created transaction ${transaction.id}`);
+
+    return transaction;
+  }
 }
 

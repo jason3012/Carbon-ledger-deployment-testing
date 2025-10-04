@@ -85,13 +85,16 @@ export class NessieClient {
 }
 
 // Factory function to get the appropriate client
-export function getNessieClient(useReal: boolean = false) {
+export function getNessieClient(useReal: boolean = true) {
+  // Use real API by default if API key is available
   if (useReal && process.env.NESSIE_API_KEY) {
     return new NessieClient(
       process.env.NESSIE_API_KEY,
-      process.env.NESSIE_API_BASE || 'https://api.reimaginebanking.com'
+      process.env.NESSIE_API_BASE || 'http://api.nessieisreal.com'
     );
   }
+  
+  // Fallback to mock client
   return new NessieMockClient();
 }
 

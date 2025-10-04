@@ -92,5 +92,28 @@ export const authRouter = router({
 
     return user;
   }),
+
+  // Demo login route that always returns the current demo user
+  demoLogin: publicProcedure
+    .mutation(async ({ ctx }) => {
+      // Always return the demo user
+      const user = await ctx.prisma.user.findUnique({
+        where: { email: 'demo@carbonledger.com' },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Demo user not found',
+        });
+      }
+
+      const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, { expiresIn: '7d' });
+
+      return {
+        user: { id: user.id, email: user.email, name: user.name },
+        token,
+      };
+    }),
 });
 
