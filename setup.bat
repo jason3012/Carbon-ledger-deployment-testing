@@ -59,21 +59,13 @@ if %errorlevel% neq 0 (
 )
 echo ✅ Dependencies installed
 
-REM Start PostgreSQL
+REM Check PostgreSQL
 echo.
-echo 🐘 Starting PostgreSQL database...
-docker compose up -d
-if %errorlevel% neq 0 (
-    echo ❌ Failed to start PostgreSQL
-    pause
-    exit /b 1
-)
-echo ✅ PostgreSQL started
-
-REM Wait for database
-echo.
-echo ⏳ Waiting for database to be ready...
-timeout /t 5 /nobreak >nul
+echo 🗄️  Checking PostgreSQL...
+REM Note: User needs to have PostgreSQL installed and running locally
+echo ⚠️  Please ensure PostgreSQL is installed and running:
+echo    Download from: https://www.postgresql.org/download/
+echo    Default connection: postgresql://postgres:postgres@localhost:5432
 
 REM Setup database
 echo.

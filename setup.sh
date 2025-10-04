@@ -1,12 +1,12 @@
 #!/bin/bash
+# Carbon Ledger - Universal Setup for ALL Devices
+# Works on: macOS, Linux, Windows (Git Bash/WSL)
 
-# Carbon Ledger - Universal Setup Script
-# Works on macOS, Linux, and Windows (with Git Bash/WSL)
-
-set -e  # Exit on any error
+set -e
 
 echo "🚀 Carbon Ledger - Universal Setup"
 echo "=================================="
+echo "This will work on ANY computer!"
 echo ""
 
 # Colors for output
@@ -128,20 +128,27 @@ else
     exit 1
 fi
 
-# Start PostgreSQL with Docker
-echo ""
-print_status "Starting PostgreSQL database..."
-docker compose up -d
-if [ $? -eq 0 ]; then
-    print_success "PostgreSQL started"
+# Check PostgreSQL
+print_status "Checking PostgreSQL..."
+if command -v psql &> /dev/null; then
+    if psql -h localhost -U postgres -d carbon_ledger -c "SELECT 1;" &> /dev/null; then
+        print_success "PostgreSQL is running and accessible"
+    else
+        print_warning "PostgreSQL not accessible. Please start PostgreSQL:"
+        echo "  macOS: brew services start postgresql"
+        echo "  Linux: sudo systemctl start postgresql"
+        echo "  Windows: Start PostgreSQL service"
+        echo ""
+        echo "Then run: ./setup-database.sh"
+        exit 1
+    fi
 else
-    print_error "Failed to start PostgreSQL"
+    print_warning "PostgreSQL not found. Please install PostgreSQL:"
+    echo "  macOS: brew install postgresql"
+    echo "  Linux: sudo apt install postgresql"
+    echo "  Windows: Download from postgresql.org"
     exit 1
 fi
-
-# Wait for database to be ready
-print_status "Waiting for database to be ready..."
-sleep 5
 
 # Push database schema
 echo ""

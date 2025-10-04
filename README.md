@@ -87,17 +87,33 @@ carbon-ledger/
 
 - Node.js 20+
 - pnpm 8+
-- Docker (for local database)
+- PostgreSQL (local installation)
 
-### Automatic Setup (Recommended)
+### Setup (Choose Your Platform)
 
+#### macOS/Linux
 ```bash
-# macOS/Linux
+git clone <your-repo-url>
+cd carbon-ledger
 ./setup.sh
+```
 
-# Windows
+#### Windows
+```bash
+git clone <your-repo-url>
+cd carbon-ledger
 setup.bat
 ```
+
+### Start the Application
+```bash
+pnpm dev
+```
+
+### Access the App
+- Frontend: http://localhost:3000
+- API: http://localhost:4000
+- Login: demo@carbonledger.com / demo123
 
 ### Manual Setup
 

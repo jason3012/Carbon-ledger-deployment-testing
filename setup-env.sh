@@ -1,4 +1,4 @@
-f#!/bin/bash
+#!/bin/bash
 
 echo "🔧 Setting up your .env file..."
 
@@ -33,6 +33,6 @@ echo ""
 echo "Your .env file is already in .gitignore - it won't be committed to git! 🔒"
 echo ""
 echo "Now you can run simplified commands:"
-echo "  cd apps/api && pnpm dev"
-echo "  cd apps/web && pnpm dev"
+echo "  pnpm dev"
+echo "  Or: ./start-api.sh and ./start-web.sh"
 
