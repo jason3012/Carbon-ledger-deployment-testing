@@ -7,7 +7,7 @@ Get Carbon Ledger running locally in under 5 minutes!
 Make sure you have:
 - ✅ Node.js 20+ installed (`node --version`)
 - ✅ pnpm 8+ installed (`pnpm --version` or install with `npm i -g pnpm`)
-- ✅ Docker installed and running (`docker --version`)
+- ✅ PostgreSQL installed and running locally
 
 **Quick Setup**: Run `./setup.sh` for automatic setup with validation!
 
@@ -28,18 +28,11 @@ pnpm install
 ## Step 2: Set Up Database (1 minute)
 
 ```bash
-# Start PostgreSQL with Docker
-docker compose up -d
+# Set up environment variables
+./setup-env.sh
 
-# Verify it's running
-docker ps
-# You should see "carbon-ledger-db" container
-
-# Initialize database schema
-pnpm db:push
-
-# Load demo data
-pnpm db:seed
+# Set up database (creates database, schema, and seeds)
+./reset-database.sh
 ```
 
 ## Step 3: Configure Environment (30 seconds)
@@ -145,9 +138,11 @@ PORT=4001 pnpm --filter api dev
 ### "Database connection failed"
 ```bash
 # Check if PostgreSQL is running
-docker ps
-# Restart if needed
-docker compose restart
+psql -h localhost -U postgres -c "SELECT 1;"
+# If not running, start PostgreSQL service:
+# macOS: brew services start postgresql
+# Linux: sudo systemctl start postgresql
+# Windows: Start PostgreSQL service
 ```
 
 ### "pnpm: command not found"
@@ -167,15 +162,10 @@ npx prisma generate
 
 ### Fresh Start
 ```bash
-# Stop everything
-docker compose down -v
+# Reset everything
 pnpm clean
-
-# Start over
-docker compose up -d
+./reset-database.sh
 pnpm install
-pnpm db:push
-pnpm db:seed
 pnpm dev
 ```
 

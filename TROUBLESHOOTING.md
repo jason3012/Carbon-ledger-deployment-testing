@@ -19,9 +19,10 @@ corepack prepare pnpm@latest --activate
 - **macOS**: `brew install node` or download from nodejs.org
 - **Linux**: `sudo apt install nodejs npm` (Ubuntu/Debian)
 
-#### docker: command not found
-- **Windows/macOS**: Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- **Linux**: `sudo apt install docker.io docker-compose`
+#### PostgreSQL not found
+- **macOS**: `brew install postgresql && brew services start postgresql`
+- **Linux**: `sudo apt install postgresql postgresql-contrib`
+- **Windows**: Download from [postgresql.org](https://www.postgresql.org/download/windows/)
 
 ### 🚨 Port Already in Use
 
@@ -46,24 +47,22 @@ PORT=4001 pnpm --filter @carbon-ledger/api dev
 
 #### PostgreSQL not running
 ```bash
-# Check if Docker is running
-docker ps
+# Check if PostgreSQL is running
+psql -h localhost -U postgres -c "SELECT 1;"
 
-# Start PostgreSQL
-docker compose up -d
+# Start PostgreSQL service
+# macOS: brew services start postgresql
+# Linux: sudo systemctl start postgresql
+# Windows: Start PostgreSQL service from Services
 
-# Check logs
-docker compose logs carbon-ledger-db
+# Test connection
+psql -h localhost -U postgres -d carbon_ledger -c "SELECT 1;"
 ```
 
 #### Database connection refused
 ```bash
 # Reset database completely
-docker compose down -v
-docker compose up -d
-sleep 10
-pnpm db:push
-pnpm db:seed
+./reset-database.sh
 ```
 
 #### Permission denied (database)
@@ -152,11 +151,11 @@ sudo chmod +x *.sh
 ```bash
 # Install required packages
 sudo apt update
-sudo apt install nodejs npm docker.io docker-compose
+sudo apt install nodejs npm postgresql postgresql-contrib
 
-# Add user to docker group
-sudo usermod -aG docker $USER
-# Log out and back in
+# Start PostgreSQL service
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
 ```
 
 ### 🚨 Network Issues
@@ -207,7 +206,6 @@ If nothing else works:
 
 ```bash
 # 1. Stop everything
-docker compose down -v
 pkill -f "node.*dev"  # Kill any running dev servers
 
 # 2. Clean everything
@@ -229,7 +227,10 @@ rm -rf apps/api/dist
 ./start-api.sh  # Look at terminal output
 
 # Database logs
-docker compose logs carbon-ledger-db
+# Check PostgreSQL logs:
+# macOS: brew services info postgresql
+# Linux: sudo journalctl -u postgresql
+# Windows: Check Event Viewer
 
 # Frontend logs
 ./start-web.sh  # Look at terminal output
@@ -248,7 +249,7 @@ DEBUG=* pnpm dev
 # Check versions
 node --version
 pnpm --version
-docker --version
+psql --version
 
 # Check system
 uname -a  # Linux/macOS
@@ -261,15 +262,14 @@ systeminfo  # Windows
 2. **Try the complete reset** - Often fixes mysterious issues
 3. **Use the setup script** - `./setup.sh` handles most setup automatically
 4. **Check your .env file** - Make sure all variables are set correctly
-5. **Verify prerequisites** - Node.js 20+, pnpm 8+, Docker running
+5. **Verify prerequisites** - Node.js 20+, pnpm 8+, PostgreSQL running
 
 ## 📋 Environment Checklist
 
 - [ ] Node.js 20+ installed
 - [ ] pnpm 8+ installed  
-- [ ] Docker Desktop running
+- [ ] PostgreSQL installed and running
 - [ ] .env file exists and configured
-- [ ] PostgreSQL container running
 - [ ] Database schema pushed
 - [ ] Demo data seeded
 - [ ] No port conflicts (3000/4000)

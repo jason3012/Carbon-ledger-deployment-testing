@@ -49,7 +49,7 @@ carbon-ledger/
 │   │   │   ├── trpc/             # tRPC routers
 │   │   │   ├── jobs/             # Scheduled tasks
 │   │   │   └── prisma/           # Database schema & seeds
-│   │   └── Dockerfile
+│   │   └── package.json
 │   │
 │   └── web/                      # Next.js frontend
 │       ├── src/
@@ -63,7 +63,7 @@ carbon-ledger/
 │       │   │   └── login/
 │       │   ├── components/       # React components
 │       │   └── lib/              # Utilities
-│       └── Dockerfile
+│       └── package.json
 │
 ├── packages/
 │   ├── types/                    # Shared TypeScript types
@@ -77,7 +77,8 @@ carbon-ledger/
 │   ├── option-a/                 # Amplify + App Runner
 │   └── option-b/                 # ECS/Fargate + Copilot
 │
-├── docker-compose.yml            # Local PostgreSQL
+├── setup.sh                     # Universal setup script
+├── setup.bat                    # Windows setup script
 └── README.md
 ```
 
@@ -125,12 +126,11 @@ cd carbon-ledger
 # Install dependencies
 pnpm install
 
-# Start PostgreSQL
-docker compose up -d
-
 # Set up environment variables
-cp .env.example .env
-# Edit .env with your values
+./setup-env.sh
+
+# Set up database
+./reset-database.sh
 
 # Push database schema
 pnpm db:push
