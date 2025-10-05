@@ -127,7 +127,7 @@ export interface MerchantEmission {
   transactionCount: number;
 }
 
-export interface TransactionWithEmission extends Transaction {
+export interface TransactionWithEmission extends Omit<Transaction, 'emissionEstimate'> {
   emissionEstimate: EmissionEstimate | null;
 }
 

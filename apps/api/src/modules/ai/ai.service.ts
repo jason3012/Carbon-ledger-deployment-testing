@@ -107,11 +107,11 @@ Provide:
         schema: estimateSchema,
         system: 'You are an expert in carbon emissions accounting and environmental sustainability. Provide accurate, data-driven CO2e estimates based on transaction data using spend-based carbon accounting principles.',
         prompt,
-      });
+      } as any);
 
-      logger.info(`🤖 AI estimated ${result.kgCO2e} kg CO2e for transaction ${transaction.id}`);
+      logger.info(`🤖 AI estimated ${(result as any)?.kgCO2e} kg CO2e for transaction ${transaction.id}`);
       
-      return result as AIEmissionEstimate;
+      return result as unknown as AIEmissionEstimate;
     } catch (error) {
       logger.error('❌ AI estimation failed:', error);
       return null;
@@ -182,11 +182,11 @@ Focus on the top emission categories and provide realistic percentage reductions
         schema: actionPlanSchema,
         system: 'You are an expert carbon reduction advisor. Create actionable, personalized plans that are realistic and achievable. Focus on behavioral changes, sustainable alternatives, and measurable impact. Provide specific percentage reductions and practical steps.',
         prompt,
-      });
+      } as any);
 
-      logger.info(`🤖 AI generated action plan for user ${userId} with ${result.actions?.length || 0} actions`);
+      logger.info(`🤖 AI generated action plan for user ${userId} with ${(result as any)?.actions?.length || 0} actions`);
       
-      return result as ActionPlan;
+      return result as unknown as ActionPlan;
     } catch (error) {
       logger.error('❌ AI action plan generation failed:', error);
       return null;
@@ -225,7 +225,7 @@ Keep it concise (2-3 sentences total).`;
         system: 'You are a carbon emissions analyst. Provide clear, actionable insights.',
         prompt,
         maxTokens: 200,
-      });
+      } as any);
 
       logger.info('🤖 AI generated emission insights');
       

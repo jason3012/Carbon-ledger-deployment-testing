@@ -109,7 +109,7 @@ export default function TransactionsPage() {
                 </tr>
               </thead>
               <tbody>
-                {transactions?.map((txn) => (
+                {transactions?.map((txn: any) => (
                   <tr key={txn.id} className="border-b hover:bg-muted/50 transition-colors">
                     <td className="py-3 px-4 text-sm">{formatDate(txn.date)}</td>
                     <td className="py-3 px-4">

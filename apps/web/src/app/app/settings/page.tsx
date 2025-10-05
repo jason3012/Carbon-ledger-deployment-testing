@@ -25,7 +25,7 @@ export default function SettingsPage() {
       console.error('Sync failed:', error);
       
       // If it's a foreign key constraint error, refresh the token
-      if (error.message?.includes('Foreign key constraint violated')) {
+      if (error instanceof Error && error.message?.includes('Foreign key constraint violated')) {
         console.log('🔄 Token mismatch detected, refreshing...');
         // Clear old token and reload
         localStorage.clear();

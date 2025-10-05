@@ -68,7 +68,7 @@ export class NessieClient {
       throw new Error(`Nessie API error: ${response.statusText}`);
     }
     
-    return response.json();
+    return response.json() as Promise<T>;
   }
 
   async getAccounts(customerId: string): Promise<NessieAccount[]> {

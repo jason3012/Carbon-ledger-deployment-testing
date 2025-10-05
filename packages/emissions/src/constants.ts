@@ -4,7 +4,6 @@ export const MCC_CATEGORY_MAP: Record<string, string> = {
   '5541': 'transport.fuel', // Service Stations (with or without Ancillary Services)
   '5542': 'transport.fuel', // Automated Fuel Dispensers
   '5172': 'transport.fuel', // Petroleum and Petroleum Products
-  '5983': 'transport.fuel', // Fuel Dealers (Non Automotive)
   '4111': 'transport.publictransit', // Transportation Services (Not Elsewhere Classified)
   '4112': 'transport.publictransit', // Local and Suburban Commuter Passenger Transportation
   '4131': 'transport.publictransit', // Bus Lines
@@ -14,14 +13,12 @@ export const MCC_CATEGORY_MAP: Record<string, string> = {
   '4511': 'transport.airline', // Airlines
   '4119': 'transport.publictransit', // Ambulance Services
   '4121': 'transport.publictransit', // Taxicabs and Limousines
-  '4131': 'transport.publictransit', // Bus Lines
   '4214': 'transport.shipping', // Motor Freight Carriers and Trucking
   '4215': 'transport.shipping', // Courier Services
   '4225': 'transport.shipping', // Public Warehousing and Storage
   '4411': 'transport.cruise', // Steamship and Cruise Lines
   '4457': 'transport.boat', // Boat Rentals and Leases
   '4468': 'transport.boat', // Marinas, Marine Service, and Supplies
-  '4511': 'transport.airline', // Airlines, Air Carriers
   '4582': 'transport.airline', // Airports, Flying Fields, and Airport Terminals
   '4722': 'transport.travel', // Travel Agencies and Tour Operators
   '4784': 'transport.travel', // Toll and Bridge Fees
@@ -34,7 +31,6 @@ export const MCC_CATEGORY_MAP: Record<string, string> = {
   '4821': 'utilities.telecom', // Telegraph Services
   '4829': 'utilities.telecom', // Money Orders - Wire Transfer
   '4899': 'utilities.telecom', // Cable and Other Pay Television Services
-  '4900': 'utilities.electricity', // Utilities
   '4911': 'utilities.electricity', // Electric Services
   '4922': 'utilities.gas', // Natural Gas and Liquefied Petroleum Gas (LPG)
   '4923': 'utilities.gas', // Fuel Oil Sales and Service
@@ -58,13 +54,9 @@ export const MCC_CATEGORY_MAP: Record<string, string> = {
   '5331': 'grocery', // Variety Stores
   '5399': 'grocery', // Miscellaneous General Merchandise
   '5441': 'grocery', // Candy, Nut, and Confectionery Stores
-  '5462': 'grocery', // Bakeries
-  '5499': 'grocery', // Miscellaneous Food Stores
   '5531': 'grocery', // Auto and Home Supply Stores
   '5532': 'grocery', // Automotive Tire Stores
   '5533': 'grocery', // Automotive Parts and Accessories Stores
-  '5541': 'transport.fuel', // Service Stations (with or without Ancillary Services)
-  '5542': 'transport.fuel', // Automated Fuel Dispensers
   '5561': 'grocery', // Recreational Vehicle Dealers
   '5571': 'grocery', // Motorcycle Dealers
   '5592': 'grocery', // Motor Home Dealers

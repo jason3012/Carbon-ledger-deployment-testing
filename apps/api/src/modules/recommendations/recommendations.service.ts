@@ -24,7 +24,7 @@ export class RecommendationsService {
       select: { id: true },
     });
 
-    const accountIds = accounts.map((a) => a.id);
+    const accountIds = accounts.map((a: { id: string }) => a.id);
 
     // Parse month
     const [year, monthNum] = targetMonth.split('-');
@@ -220,7 +220,7 @@ export class RecommendationsService {
       select: { id: true },
     });
 
-    const accountIds = accounts.map((a) => a.id);
+    const accountIds = accounts.map((a: { id: string }) => a.id);
 
     // Parse month
     const [year, monthNum] = targetMonth.split('-');
@@ -248,7 +248,7 @@ export class RecommendationsService {
     // Generate action plan with AI
     const actionPlan = await this.aiService.generateActionPlan(
       userId,
-      transactions.map(t => ({
+      transactions.map((t: any) => ({
         id: t.id,
         date: t.date,
         amountUSD: t.amountUSD,
@@ -257,7 +257,11 @@ export class RecommendationsService {
         merchantName: t.merchant?.name,
       })),
       totalEmissions,
-      categoryStats
+      categoryStats.map((cat: any) => ({
+        category: cat.category,
+        kgCO2e: cat.totalKg,
+        percentage: cat.percentage
+      }))
     );
 
     if (!actionPlan) {

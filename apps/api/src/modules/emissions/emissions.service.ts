@@ -1,4 +1,5 @@
-import { prisma, EmissionMethod } from '@carbon-ledger/db';
+import { prisma } from '@carbon-ledger/db';
+import { EmissionMethod } from '@prisma/client';
 import { estimateEmissions } from '@carbon-ledger/emissions';
 import { logger } from '../../utils/logger';
 import { AIService } from '../ai/ai.service';
@@ -189,7 +190,7 @@ export class EmissionsService {
       select: { id: true },
     });
 
-    const accountIds = accounts.map((a) => a.id);
+    const accountIds = accounts.map((a: { id: string }) => a.id);
 
     // Current month filter
     const now = new Date();
@@ -214,7 +215,7 @@ export class EmissionsService {
     });
 
     const currentMonthKg = currentMonthTxns.reduce(
-      (sum, txn) => sum + (txn.emissionEstimate?.kgCO2e || 0),
+      (sum: number, txn: any) => sum + (txn.emissionEstimate?.kgCO2e || 0),
       0
     );
 
@@ -228,7 +229,7 @@ export class EmissionsService {
     });
 
     const lastMonthKg = lastMonthTxns.reduce(
-      (sum, txn) => sum + (txn.emissionEstimate?.kgCO2e || 0),
+      (sum: number, txn: any) => sum + (txn.emissionEstimate?.kgCO2e || 0),
       0
     );
 
@@ -240,7 +241,7 @@ export class EmissionsService {
     const categoryMap = new Map<string, { kgCO2e: number; count: number }>();
     let totalKg = 0;
 
-    currentMonthTxns.forEach((txn) => {
+    currentMonthTxns.forEach((txn: any) => {
       const kg = txn.emissionEstimate?.kgCO2e || 0;
       totalKg += kg;
       
@@ -260,7 +261,7 @@ export class EmissionsService {
 
     // Daily trend
     const dailyMap = new Map<string, number>();
-    currentMonthTxns.forEach((txn) => {
+    currentMonthTxns.forEach((txn: any) => {
       const dateKey = txn.date.toISOString().split('T')[0];
       const existing = dailyMap.get(dateKey) || 0;
       dailyMap.set(dateKey, existing + (txn.emissionEstimate?.kgCO2e || 0));
@@ -281,7 +282,7 @@ export class EmissionsService {
       include: { emissionEstimate: true, merchant: true },
     });
 
-    txnsWithMerchant.forEach((txn) => {
+    txnsWithMerchant.forEach((txn: any) => {
       if (!txn.merchant) return;
       const kg = txn.emissionEstimate?.kgCO2e || 0;
       const existing = merchantMap.get(txn.merchant.name) || { kgCO2e: 0, count: 0 };
