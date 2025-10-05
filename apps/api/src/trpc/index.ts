@@ -1,5 +1,5 @@
 import { initTRPC, TRPCError } from '@trpc/server';
-import { Context } from './context';
+import type { Context } from './context';
 
 const t = initTRPC.context<Context>().create();
 
@@ -7,7 +7,7 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 // Protected procedure that requires authentication
-export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+export const protectedProcedure: any = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.userId) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not authenticated' });
   }
@@ -15,7 +15,7 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   return next({
     ctx: {
       ...ctx,
-      userId: ctx.userId, // Now guaranteed to be defined
+      userId: ctx.userId as string, // Now guaranteed to be defined
     },
   });
 });

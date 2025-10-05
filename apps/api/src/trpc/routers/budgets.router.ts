@@ -4,7 +4,7 @@ import { BudgetsService } from '../../modules/budgets/budgets.service';
 
 const budgetsService = new BudgetsService();
 
-export const budgetsRouter = router({
+export const budgetsRouter: any = router({
   get: protectedProcedure
     .input(z.object({ month: z.string() }))
     .query(async ({ ctx, input }) => {

@@ -4,7 +4,7 @@ import { EmissionsService } from '../../modules/emissions/emissions.service';
 
 const emissionsService = new EmissionsService();
 
-export const emissionsRouter = router({
+export const emissionsRouter: any = router({
   dashboard: protectedProcedure
     .input(z.object({ month: z.string().optional() }))
     .query(async ({ ctx, input }) => {

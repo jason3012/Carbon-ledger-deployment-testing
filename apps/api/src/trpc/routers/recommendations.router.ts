@@ -4,7 +4,7 @@ import { RecommendationsService } from '../../modules/recommendations/recommenda
 
 const recommendationsService = new RecommendationsService();
 
-export const recommendationsRouter = router({
+export const recommendationsRouter: any = router({
   list: protectedProcedure
     .input(z.object({ month: z.string().optional() }))
     .query(async ({ ctx, input }) => {

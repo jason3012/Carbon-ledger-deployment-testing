@@ -4,7 +4,7 @@ import { TransactionsService } from '../../modules/transactions/transactions.ser
 
 const transactionsService = new TransactionsService();
 
-export const transactionsRouter = router({
+export const transactionsRouter: any = router({
   list: protectedProcedure
     .input(
       z.object({

@@ -1,5 +1,10 @@
 import { prisma } from '@carbon-ledger/db';
-import { EmissionMethod } from '@prisma/client';
+
+// Define EmissionMethod enum locally to match Prisma schema
+enum EmissionMethod {
+  ACTIVITY = 'ACTIVITY',
+  INTENSITY = 'INTENSITY'
+}
 import { estimateEmissions } from '@carbon-ledger/emissions';
 import { logger } from '../../utils/logger';
 import { AIService } from '../ai/ai.service';
