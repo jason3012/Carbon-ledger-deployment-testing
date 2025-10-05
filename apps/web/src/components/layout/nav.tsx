@@ -16,11 +16,11 @@ import {
 } from 'lucide-react';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/transactions', label: 'Transactions', icon: Receipt },
-  { href: '/insights', label: 'Insights', icon: TrendingUp },
-  { href: '/actions', label: 'Actions', icon: Target },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/app/transactions', label: 'Transactions', icon: Receipt },
+  { href: '/app/insights', label: 'Insights', icon: TrendingUp },
+  { href: '/app/actions', label: 'Actions', icon: Target },
+  { href: '/app/settings', label: 'Settings', icon: Settings },
 ];
 
 export function Nav() {
