@@ -1,30 +1,70 @@
 import { prisma, EmissionMethod } from '@carbon-ledger/db';
 import { estimateEmissions } from '@carbon-ledger/emissions';
 import { logger } from '../../utils/logger';
+import { AIService } from '../ai/ai.service';
 
 export class EmissionsService {
+  private aiService = new AIService();
   /**
    * Compute emissions for a single transaction
    */
-  async computeEmission(transactionId: string) {
+  async computeEmission(transactionId: string, useAI: boolean = false) {
     const transaction = await prisma.transaction.findUnique({
       where: { id: transactionId },
+      include: { merchant: true },
     });
 
     if (!transaction) {
       throw new Error('Transaction not found');
     }
 
-    // Calculate emission estimate
-    const estimate = estimateEmissions(
-      transaction.amountUSD,
-      transaction.category,
-      transaction.rawDescription
-    );
+    // Try AI estimation first if enabled
+    let estimate;
+    let aiEnhanced = false;
+
+    if (useAI && this.aiService.isEnabled()) {
+      logger.info(`🤖 Using AI to estimate emissions for transaction ${transactionId}`);
+      const aiEstimate = await this.aiService.estimateEmissionsWithAI({
+        id: transaction.id,
+        date: transaction.date,
+        amountUSD: transaction.amountUSD,
+        rawDescription: transaction.rawDescription,
+        category: transaction.category,
+        merchantName: transaction.merchant?.name,
+      });
+
+      if (aiEstimate) {
+        aiEnhanced = true;
+        estimate = {
+          kgCO2e: aiEstimate.kgCO2e,
+          method: EmissionMethod.ACTIVITY, // AI uses activity-based reasoning
+          details: {
+            source: 'AI-Enhanced Estimate',
+            factor: aiEstimate.kgCO2e / transaction.amountUSD,
+            unit: 'USD',
+            input: transaction.amountUSD,
+            categoryKey: aiEstimate.category,
+            notes: aiEstimate.explanation,
+            confidence: aiEstimate.confidence,
+            aiEnhanced: true,
+            suggestedAlternatives: aiEstimate.suggestedAlternatives,
+          },
+        };
+      }
+    }
+
+    // Fallback to traditional estimation
+    if (!estimate) {
+      estimate = estimateEmissions(
+        transaction.amountUSD,
+        transaction.category,
+        transaction.rawDescription
+      );
+    }
 
     // Check if factor exists in database, create if needed
     let factor = null;
-    if (estimate.details.source) {
+    if (estimate.details.source && !aiEnhanced) {
       factor = await this.getOrCreateFactor(estimate.details);
     }
 
@@ -45,6 +85,10 @@ export class EmissionsService {
         details: estimate.details,
       },
     });
+
+    if (aiEnhanced) {
+      logger.info(`✅ AI-enhanced emission estimate: ${estimate.kgCO2e.toFixed(2)} kg CO2e (${estimate.details.confidence} confidence)`);
+    }
 
     return emissionEstimate;
   }

@@ -15,8 +15,10 @@
     "@carbon-ledger/db": "workspace:*",
     "@carbon-ledger/emissions": "workspace:*",
     "@carbon-ledger/types": "workspace:*",
+    "@merit-systems/echo-typescript-sdk": "^1.0.18",
     "@prisma/client": "5.22.0",
     "@trpc/server": "^10.45.1",
+    "ai": "^5.0.60",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
@@ -24,6 +26,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "node-cron": "^3.0.3",
+    "openai": "^6.1.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

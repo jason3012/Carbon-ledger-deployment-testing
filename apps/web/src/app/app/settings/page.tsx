@@ -19,7 +19,7 @@ export default function SettingsPage() {
 
   const handleSyncAccounts = async () => {
     try {
-      await syncAccountsMutation.mutateAsync({ useRealNessie: true });
+      await syncAccountsMutation.mutateAsync({ useRealNessie: false });
       await refetchAccounts();
     } catch (error) {
       console.error('Sync failed:', error);

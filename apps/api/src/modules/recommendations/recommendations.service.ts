@@ -1,5 +1,6 @@
 import { prisma } from '@carbon-ledger/db';
 import { logger } from '../../utils/logger';
+import { AIService } from '../ai/ai.service';
 
 interface CategoryStats {
   category: string;
@@ -9,6 +10,7 @@ interface CategoryStats {
 }
 
 export class RecommendationsService {
+  private aiService = new AIService();
   /**
    * Generate recommendations based on user's emission patterns
    */
@@ -197,6 +199,112 @@ export class RecommendationsService {
       where,
       orderBy: { estReductionKg: 'desc' },
     });
+  }
+
+  /**
+   * Generate AI-powered personalized action plan
+   */
+  async generateAIActionPlan(userId: string, month?: string) {
+    if (!this.aiService.isEnabled()) {
+      logger.info('AI service not enabled, falling back to standard recommendations');
+      const recommendations = await this.generateRecommendations(userId, month);
+      return { recommendations, actionPlan: null };
+    }
+
+    const now = new Date();
+    const targetMonth = month || `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+    // Get user's accounts
+    const accounts = await prisma.account.findMany({
+      where: { userId },
+      select: { id: true },
+    });
+
+    const accountIds = accounts.map((a) => a.id);
+
+    // Parse month
+    const [year, monthNum] = targetMonth.split('-');
+    const startDate = new Date(parseInt(year), parseInt(monthNum) - 1, 1);
+    const endDate = new Date(parseInt(year), parseInt(monthNum), 0, 23, 59, 59);
+
+    // Get transactions with all details
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        accountId: { in: accountIds },
+        date: { gte: startDate, lte: endDate },
+      },
+      include: { 
+        emissionEstimate: true,
+        merchant: true,
+      },
+    });
+
+    // Calculate category statistics
+    const categoryStats = this.calculateCategoryStats(transactions);
+    const totalEmissions = categoryStats.reduce((sum, cat) => sum + cat.totalKg, 0);
+
+    logger.info(`🤖 Generating AI-powered action plan for user ${userId}`);
+
+    // Generate action plan with AI
+    const actionPlan = await this.aiService.generateActionPlan(
+      userId,
+      transactions.map(t => ({
+        id: t.id,
+        date: t.date,
+        amountUSD: t.amountUSD,
+        rawDescription: t.rawDescription,
+        category: t.category,
+        merchantName: t.merchant?.name,
+      })),
+      totalEmissions,
+      categoryStats
+    );
+
+    if (!actionPlan) {
+      logger.warn('AI action plan generation failed, falling back to standard recommendations');
+      const recommendations = await this.generateRecommendations(userId, month);
+      return { recommendations, actionPlan: null };
+    }
+
+    // Save AI-generated recommendations to database
+    const saved = [];
+    for (const action of actionPlan.actions) {
+      const existing = await prisma.recommendation.findFirst({
+        where: {
+          userId,
+          month: targetMonth,
+          title: action.action,
+        },
+      });
+
+      if (!existing) {
+        const created = await prisma.recommendation.create({
+          data: {
+            userId,
+            month: targetMonth,
+            title: action.action,
+            description: `${action.steps.join(' ')} (Difficulty: ${action.difficulty}, Timeframe: ${action.timeframe})`,
+            estReductionKg: action.impactKg,
+          },
+        });
+        saved.push(created);
+      } else {
+        saved.push(existing);
+      }
+    }
+
+    logger.info(`✅ Generated ${saved.length} AI-powered recommendations for user ${userId}`);
+
+    return {
+      recommendations: saved,
+      actionPlan: {
+        title: actionPlan.title,
+        summary: actionPlan.summary,
+        targetReduction: actionPlan.targetReduction,
+        timeline: actionPlan.timeline,
+        estimatedImpact: actionPlan.estimatedImpact,
+      },
+    };
   }
 }
 

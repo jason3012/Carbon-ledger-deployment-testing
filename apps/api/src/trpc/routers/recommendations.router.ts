@@ -22,5 +22,11 @@ export const recommendationsRouter = router({
     .mutation(async ({ input }) => {
       return recommendationsService.acceptRecommendation(input.recommendationId);
     }),
+
+  generateAIActionPlan: protectedProcedure
+    .input(z.object({ month: z.string().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      return recommendationsService.generateAIActionPlan(ctx.userId, input.month);
+    }),
 });
 

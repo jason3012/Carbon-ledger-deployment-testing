@@ -18,7 +18,7 @@ export const accountsRouter = router({
   syncFromNessie: protectedProcedure
     .input(z.object({ useRealNessie: z.boolean().optional() }))
     .mutation(async ({ ctx, input }) => {
-      return accountsService.syncNessieAccounts(ctx.userId, input.useRealNessie);
+      return accountsService.syncNessieAccounts(ctx.userId, input.useRealNessie ?? false);
     }),
 });
 

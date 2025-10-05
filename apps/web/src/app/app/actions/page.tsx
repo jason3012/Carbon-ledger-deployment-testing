@@ -12,12 +12,19 @@ export default function ActionsPage() {
 
   const { data: recommendations, refetch } = trpc.recommendations.list.useQuery({});
   const generateMutation = trpc.recommendations.generate.useMutation();
+  const generateAIMutation = trpc.recommendations.generateAIActionPlan.useMutation();
   const acceptMutation = trpc.recommendations.accept.useMutation();
 
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      await generateMutation.mutateAsync({});
+      // Try AI-powered generation first, fall back to standard if it fails
+      try {
+        await generateAIMutation.mutateAsync({});
+      } catch (error) {
+        console.log('AI generation failed, using standard recommendations');
+        await generateMutation.mutateAsync({});
+      }
       await refetch();
     } finally {
       setGenerating(false);

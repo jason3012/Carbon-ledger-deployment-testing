@@ -2,8 +2,10 @@ import { prisma } from '@carbon-ledger/db';
 import { classifyTransaction } from '@carbon-ledger/emissions';
 import { getNessieClient } from './nessie-mock';
 import { logger } from '../../utils/logger';
+import { EmissionsService } from '../emissions/emissions.service';
 
 export class TransactionsService {
+  private emissionsService = new EmissionsService();
   /**
    * Sync transactions from Nessie API
    */
@@ -59,6 +61,15 @@ export class TransactionsService {
           metadata: { nessieMedium: purchase.medium, nessieStatus: purchase.status },
         },
       });
+
+      // Automatically compute emissions for the new transaction
+      try {
+        await this.emissionsService.computeEmission(transaction.id);
+        logger.info(`✅ Computed emissions for transaction ${transaction.id}`);
+      } catch (error) {
+        logger.error(`❌ Failed to compute emissions for transaction ${transaction.id}:`, error);
+        // Continue syncing even if emission computation fails
+      }
 
       syncedTransactions.push(transaction);
     }

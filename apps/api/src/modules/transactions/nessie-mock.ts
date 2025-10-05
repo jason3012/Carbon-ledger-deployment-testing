@@ -85,16 +85,18 @@ export class NessieClient {
 }
 
 // Factory function to get the appropriate client
-export function getNessieClient(useReal: boolean = true) {
-  // Use real API by default if API key is available
-  if (useReal && process.env.NESSIE_API_KEY) {
+export function getNessieClient(useReal: boolean = false) {
+  // Use real API only if explicitly requested AND API key is available
+  if (useReal === true && process.env.NESSIE_API_KEY) {
+    console.log('🔗 Using real Nessie API client');
     return new NessieClient(
       process.env.NESSIE_API_KEY,
       process.env.NESSIE_API_BASE || 'http://api.nessieisreal.com'
     );
   }
   
-  // Fallback to mock client
+  // Default to mock client for development (even if API key exists)
+  console.log('🎭 Using mock Nessie client for development');
   return new NessieMockClient();
 }
 

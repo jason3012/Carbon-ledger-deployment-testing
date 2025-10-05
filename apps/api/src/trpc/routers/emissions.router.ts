@@ -20,5 +20,11 @@ export const emissionsRouter = router({
   recomputeAll: protectedProcedure.mutation(async () => {
     return emissionsService.recomputeAllEmissions();
   }),
+
+  computeWithAI: protectedProcedure
+    .input(z.object({ transactionId: z.string() }))
+    .mutation(async ({ input }) => {
+      return emissionsService.computeEmission(input.transactionId, true);
+    }),
 });
 
