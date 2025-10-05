@@ -4,7 +4,7 @@ import { AccountsService } from '../../modules/accounts/accounts.service';
 
 const accountsService = new AccountsService();
 
-export const accountsRouter: any = router({
+export const accountsRouter = router({
   list: protectedProcedure.query(async ({ ctx }) => {
     return accountsService.getAccounts(ctx.userId);
   }),

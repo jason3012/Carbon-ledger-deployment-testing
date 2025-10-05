@@ -6,7 +6,7 @@ import { emissionsRouter } from './emissions.router';
 import { budgetsRouter } from './budgets.router';
 import { recommendationsRouter } from './recommendations.router';
 
-export const appRouter: any = router({
+export const appRouter = router({
   auth: authRouter,
   accounts: accountsRouter,
   transactions: transactionsRouter,
